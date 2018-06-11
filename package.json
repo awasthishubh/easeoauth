@@ -1,0 +1,35 @@
+{
+  "name": "oauth_reg",
+  "version": "1.0.0",
+  "description": "A package to ease the process of oauth authentication using various oauth providers",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/awasthishubh/oauth_reg.git"
+  },
+  "keywords": [
+    "oauth",
+    "authentication",
+    "social",
+    "facebook",
+    "twitter",
+    "microsoft",
+    "instagram",
+    "google",
+    "login",
+    "register"
+  ],
+  "author": "Shubham Awasthi <aw.shubh@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/awasthishubh/oauth_reg/issues"
+  },
+  "homepage": "https://github.com/awasthishubh/oauth_reg#readme",
+  "dependencies": {
+    "request": "^2.87.0",
+    "request-promise": "^4.2.2"
+  }
+}

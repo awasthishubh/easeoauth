@@ -25,7 +25,9 @@ function exec(app) {
         throw Error['err']="All keys not provided";
     if(!(_urls.initialize, _urls.callback, _urls.post))
         throw Error['err']="All urls not provided";
-    console.log("running");
+    console.log("Oauth process started");
+    require('./services/instagram').func(app,_keys,_urls);
+
 }
 
 

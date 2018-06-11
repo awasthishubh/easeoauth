@@ -26,8 +26,10 @@ function exec(app) {
     if(!(_urls.initialize, _urls.callback, _urls.post))
         throw Error['err']="All urls not provided";
     console.log("Oauth process started");
+
+    require('./services/google').func(app,_keys,_urls);
     // require('./services/instagram').func(app,_keys,_urls);
-    require('./services/microsoft').func(app,_keys,_urls);
+    // require('./services/microsoft').func(app,_keys,_urls);
 
 }
 

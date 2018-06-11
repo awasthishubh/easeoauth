@@ -1,44 +1,49 @@
-var serv, _keys = {},
-    _urls = {}
+// var serv, _keys = {},
+//     _urls = {}
+//
+// function service(service) {
+//     serv = service
+// }
+//
+// function urls(initialize,callback, post, redirect) {
+//     _urls = {
+//         callback,
+//         post,
+//         redirect,
+//         initialize
+//     }
+// }
+//
+// function keys(client_id, client_secret) {
+//     _keys={client_id, client_secret}
+// }
 
-function service(service) {
-    serv = service
-}
-
-function urls(initialize,callback, post, redirect) {
-    _urls = {
-        callback,
-        post,
-        redirect,
-        initialize
-    }
-}
-
-function keys(client_id, client_secret) {
-    _keys={client_id, client_secret}
-}
-
-function exec(app) {
-    if(!(serv))
+function exec(config, app) {
+    if(!(config.service))
         throw Error['err']="Service not configured";
-    if(!(_keys.client_id || _keys.client_secret))
-        throw Error['err']="All keys not provided";
-    if(!(_urls.initialize, _urls.callback, _urls.post))
-        throw Error['err']="All urls not provided";
+    if(!(config.keys.client_id || config.keys.client_secret))
+        throw Error['err']="Keys not provided properly";
+    if(!(config.urls.initialize, config.urls.callback))
+        throw Error['err']="Urls not provided properly";
+    config.urls.initialize.replace("\\","/");
+    config.urls.callback.replace("\\","/")
+    if(config.urls.initialize[0]!='/')
+        config.urls.initialize ='/'+config.urls.initialize
+    if(config.urls.callback[0]!='/')
+        config.urls.callback ='/'+config.urls.callback
+    config.service=config.service.toLowerCase()
     console.log("Oauth process started");
 
-    require('./services/twitter').func(app,_keys,_urls);
-    // require('./services/facebook').func(app,_keys,_urls);
-    // require('./services/google').func(app,_keys,_urls);
-    // require('./services/instagram').func(app,_keys,_urls);
-    // require('./services/microsoft').func(app,_keys,_urls);
+    supported=["facebook","instagram", "twitter", "google", "microsoft"]
+
+    if(supported.indexOf(config.service)==-1)
+        throw Error['err']="Service not supported";
+
+    require('./services/'+config.service).func(app,config.keys,config.urls);
 
 }
 
 
 module.exports = {
-    service,
-    urls,
-    keys,
     exec
 };

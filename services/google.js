@@ -1,8 +1,7 @@
 const rp = require('request-promise');
 
-function func(app, keys, urls) {
+function func(app, keys, urls, callback) {
     app.all(urls.initialize, (req, res) => {
-
         url = `https://accounts.google.com/o/oauth2/auth?response_type=code&scope=https://www.googleapis.com/auth/analytics.readonly+https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/plus.login&client_id=${keys.client_id}&redirect_uri=${req.protocol + "://" + req.headers.host + urls.callback}`
 
         res.writeHead(303, {
@@ -34,14 +33,19 @@ function func(app, keys, urls) {
                     'bearer': body.access_token
                 }
             })
+            details={
+                usid: data.id,
+                name: data.name,
+                email: data.email,
+                photo: data.picture,
+                provider: 'Google',
+                raw_dat: data
+            }
             console.log(data);
+            return callback(null, details, req, res);
 
         } catch (err) {
-            if (err.error) console.log(err.error);
-            else console.log(err);
-            return res.json({
-                err: 'Invalid/Missing auth code'
-            })
+            return callback(err, null, req, res)
         }
     })
 }

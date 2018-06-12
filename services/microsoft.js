@@ -1,6 +1,6 @@
 const rp = require('request-promise');
 
-function func(app, keys, urls) {
+function func(app, keys, urls, callback) {
     app.all(urls.initialize, (req, res) => {
 
         url = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize\
@@ -38,14 +38,20 @@ function func(app, keys, urls) {
                     'bearer': body.access_token
                 }
             })
+            details={
+                usid: data.id,
+                name: data.displayName,
+                username: null,
+                email: data.userPrincipalName,
+                photo: null,
+                provider: 'Microsoft',
+                raw_dat: data
+              }
             console.log(data);
-
+            return callback(null, details, req, res);
         } catch (err) {
-            if (err.error) console.log(err.error);
-            else console.log(err);
-            return res.json({
-                err: 'Invalid/Missing auth code'
-            })
+            return callback(err, null, req, res)
+
         }
     })
 }

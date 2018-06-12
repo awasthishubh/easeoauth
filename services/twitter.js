@@ -1,12 +1,12 @@
 const rp = require('request-promise');
 
-function func(app, keys, urls) {
+function func(app, keys, urls, callback) {
     app.all(urls.initialize, async (req, res) => {
         body = await rp.post({
             url: 'https://api.twitter.com/oauth/request_token',
             json: true,
             'oauth': {
-                callback: req.protocol + "://" + req.headers.host + urls.callback,
+                callback: req.protool + "://" + req.headers.host + urls.callback,
                 consumer_key: keys.client_id,
                 consumer_secret: keys.client_secret
             }
@@ -31,7 +31,7 @@ function func(app, keys, urls) {
                 }
             })
 
-            console.log(body);
+            // console.log(body);
 
             query = JSON.parse('{"' + decodeURI(body.replace(/&/g, "\",\"").replace(/=/g, "\":\"")) + '"}')
             url = `https://api.twitter.com/1.1/users/show.json?oauth_token_secret=${query.oauth_token_secret}&user_id=${query.user_id}&screen_name=${query.screen_name}`,
@@ -49,14 +49,20 @@ function func(app, keys, urls) {
                     }
 
                 })
-            console.log(data);
+            // console.log(data);
+            details = {
+                usid: data.id_str,
+                name: data.name,
+                username: data.screen_name,
+                email: null,
+                photo: data.profile_image_url,
+                provider: 'Twitter',
+                raw_dat: data
+            }
+            return callback(null, details, req, res);
 
         } catch (err) {
-            if (err.error) console.log(err.error);
-            else console.log(err);
-            return res.json({
-                err: 'Invalid/Missing auth code'
-            })
+            return callback(err,null, req, res);
         }
 
     })

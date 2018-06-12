@@ -1,6 +1,6 @@
 const rp = require('request-promise');
 
-function func(app, keys, urls) {
+function func(app, keys, urls, callback) {
     app.all(urls.initialize, (req, res) => {
 
         url = `https://www.instagram.com/oauth/authorize/?client_id=${keys.client_id}&redirect_uri=${req.protocol+"://"+req.headers.host+ urls.callback}&response_type=code`
@@ -31,13 +31,20 @@ function func(app, keys, urls) {
                 json: true
             })
 
-            res.send(data)
+            details = {
+                usid: data.data.id,
+                name: data.data.full_name,
+                username: data.data.username,
+                email: null,
+                photo: data.data.profile_picture,
+                provider: 'Instagram',
+                raw_dat: {
+                    data
+                }
+            }
+            return callback(null, details, req, res);
         } catch (err) {
-            if (err.error) console.log(err.error);
-            else console.log(err);
-            return res.json({
-                err: 'Invalid/Missing auth code'
-            })
+            return callback(err, null, req, res)
         }
     })
 }

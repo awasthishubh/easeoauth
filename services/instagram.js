@@ -2,13 +2,20 @@ const rp = require('request-promise');
 
 function func(app, keys, urls, callback) {
     app.all(urls.initialize, (req, res) => {
+        console.log('\x1b[36m%s\x1b[0m', "Instagram oauth process started");
+        try {
+            url = `https://www.instagram.com/oauth/authorize/?client_id=${keys.client_id}&redirect_uri=${req.protocol+"://"+req.headers.host+ urls.callback}&response_type=code`
 
-        url = `https://www.instagram.com/oauth/authorize/?client_id=${keys.client_id}&redirect_uri=${req.protocol+"://"+req.headers.host+ urls.callback}&response_type=code`
-
-        res.writeHead(303, {
-            Location: url
-        });
-        res.end();
+            res.writeHead(303, {
+                Location: url
+            });
+            res.end();
+        } catch (e) {
+            res.status(500).json({
+                err: "Something went wrong"
+            })
+            return callback(e)
+        }
     })
 
     app.all(urls.callback, async (req, res) => {

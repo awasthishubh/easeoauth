@@ -1,15 +1,21 @@
 const rp = require('request-promise');
 
-function func(app, keys, urls, resolve, reject) {
+function func(app, keys, urls, callback) {
     app.all(urls.initialize, (req, res) => {
-        
+        console.log('\x1b[36m%s\x1b[0m', "Facebook oauth process started");
+        try {
+            url = `https://www.facebook.com/v3.0/dialog/oauth?client_id=${keys.client_id}&redirect_uri=${req.protocol + "://" + req.headers.host + urls.callback}&response_type=code&scope=email`
 
-        url = `https://www.facebook.com/v3.0/dialog/oauth?client_id=${keys.client_id}&redirect_uri=${req.protocol + "://" + req.headers.host + urls.callback}&response_type=code&scope=email`
-
-        res.writeHead(303, {
-            Location: url
-        });
-        res.end();
+            res.writeHead(303, {
+                Location: url
+            });
+            res.end();
+        } catch (e) {
+            res.status(500).json({
+                err: "Something went wrong"
+            })
+            return callback(e)
+        }
     })
 
     app.all(urls.callback, async (req, res) => {
@@ -29,7 +35,6 @@ function func(app, keys, urls, resolve, reject) {
                 url: 'https://graph.facebook.com/v3.0/me/picture?access_token=' + body.access_token + '&format=json&redirect=false&type=large&height=1000',
                 json: true,
             })
-            console.log(data, photo);
 
             details = {
                 usid: data.id,
@@ -43,10 +48,10 @@ function func(app, keys, urls, resolve, reject) {
                 }
             }
 
-            return resolve(details, req, res);
+            return callback(null, details, req, res);
 
         } catch (err) {
-            reject(err)
+            return callback(err, null, req, res);
         }
     })
 

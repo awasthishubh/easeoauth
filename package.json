@@ -1,6 +1,6 @@
 {
-  "name": "oauth_reg",
-  "version": "1.0.0",
+  "name": "easeoauth",
+  "version": "1.0.1",
   "description": "A package to ease the process of oauth authentication using various oauth providers",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/awasthishubh/oauth_reg.git"
+    "url": "git+https://github.com/awasthishubh/easeoauth.git"
   },
   "keywords": [
     "oauth",
@@ -25,9 +25,9 @@
   "author": "Shubham Awasthi <aw.shubh@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/awasthishubh/oauth_reg/issues"
+    "url": "https://github.com/awasthishubh/easeoauth/issues"
   },
-  "homepage": "https://github.com/awasthishubh/oauth_reg#readme",
+  "homepage": "https://github.com/awasthishubh/easeoauth#readme",
   "dependencies": {
     "request": "^2.87.0",
     "request-promise": "^4.2.2"

@@ -4,7 +4,7 @@ function func(app, keys, urls, callback) {
     app.all(urls.initialize, (req, res) => {
         console.log('\x1b[36m%s\x1b[0m',"Google oauth process started");
         try {
-            url = `https://accounts.google.com/o/oauth2/auth?response_type=code&scope=https://www.googleapis.com/auth/analytics.readonly+https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/plus.login&client_id=${keys.client_id}&redirect_uri=${req.protocol + "://" + req.headers.host + urls.callback}`
+            url = `https://accounts.google.com/o/oauth2/auth?response_type=code&scope=https://www.googleapis.com/auth/plus.me+https://www.googleapis.com/auth/userinfo.email&client_id=${keys.client_id}&redirect_uri=${req.protocol + "://" + req.headers.host + urls.callback}`
 
             res.writeHead(303, {
                 Location: url

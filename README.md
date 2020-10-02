@@ -142,4 +142,4 @@ The data returned by oauth provider can by assessed as 3rd parameter of callback
 
 ```
 
-The basic purpose of this app is authentication and thus it provide minimal info about user. Rest info can be assessd from ```raw_dat```
+The basic purpose of this app is authentication and thus it provides minimal information about user. Rest information can be assessd from ```raw_dat```
